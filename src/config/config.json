@@ -1,0 +1,51 @@
+{
+  "site": {
+    "title": "My portfolio",
+    "base_url": "https://tfsmrt.github.io/tfsomrat-astro",
+    "base_path": "/tfsomrat-astro/",
+    "trailing_slash": false,
+    "favicon": "/images/favicon.png",
+    "logo": "/images/logo.png",
+    "logo_darkmode": "/images/logo-darkmode.png",
+    "logo_width": "150",
+    "logo_height": "30",
+    "logo_text": "My portfolio"
+  },
+  "settings": {
+    "search": true,
+    "sticky_header": true,
+    "theme_switcher": true,
+    "default_theme": "system",
+    "pagination": 6,
+    "summary_length": 200,
+    "blog_folder": "blog"
+  },
+  "announcement": {
+    "enable": false,
+    "content": "",
+    "expire_days": 7
+  },
+  "params": {
+    "contact_form_action": "#",
+    "copyright": "Converted from tfsomrat.wordpress.com"
+  },
+  "navigation_button": {
+    "enable": false,
+    "label": "GitHub",
+    "link": "https://github.com/tfsmrt/tfsomrat-astro"
+  },
+  "google_tag_manager": {
+    "enable": false,
+    "gtm_id": ""
+  },
+  "disqus": {
+    "enable": false,
+    "shortname": "",
+    "settings": {}
+  },
+  "metadata": {
+    "meta_author": "tfsomrat",
+    "meta_image": "/images/og-image.png",
+    "meta_description": "My portfolio — converted from WordPress to Astro"
+  }
+}
