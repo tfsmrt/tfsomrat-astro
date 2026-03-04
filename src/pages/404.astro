@@ -1,27 +1,29 @@
 ---
-import Base from "@/layouts/Base.astro";
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
-<Base title="Page Not Found">
-  <section class="section-sm text-center">
-    <div class="container">
-      <div class="row justify-center">
-        <div class="sm:col-10 md:col-8 lg:col-6">
-          <span
-            class="text-[8rem] block font-bold text-text-dark dark:text-darkmode-text-dark"
-          >
-            404
-          </span>
-          <h1 class="h2 mb-4">Page not found</h1>
-          <div class="content">
-            <p>
-              The page you are looking for might have been removed, had its name
-              changed, or is temporarily unavailable.
-            </p>
-          </div>
-          <a href="/" class="btn btn-primary mt-8">Back to home</a>
-        </div>
+<BaseLayout title="404 – Page Not Found">
+  <div class="not-found">
+    <div class="not-found-inner">
+      <div class="not-found-meta">
+        <span class="big-404">404…</span>
+      </div>
+      <div class="not-found-content">
+        <h1>Page not found.</h1>
+        <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        <a href={base} class="back-home">← Back home</a>
       </div>
     </div>
-  </section>
-</Base>
+  </div>
+</BaseLayout>
+
+<style>
+.not-found { padding: 2rem 0; }
+.not-found-inner { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start; }
+.big-404 { font-size: 4rem; font-weight: 700; line-height: 1; display: block; }
+.not-found-content h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.75rem; }
+.not-found-content p { margin-bottom: 1rem; }
+.back-home { opacity: 0.7; }
+@media (max-width: 600px) { .not-found-inner { grid-template-columns: 1fr; } }
+</style>

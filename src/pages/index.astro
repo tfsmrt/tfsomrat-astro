@@ -1,36 +1,74 @@
 ---
-import Base from "@/layouts/Base.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";
-import CallToAction from "@/partials/CallToAction.astro";
-import { getListPage } from "@/lib/contentParser.astro";
-import { render } from "astro:content";
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-const pages = await getSinglePage("pages");
-const homePage = pages.find((p) => p.id === "index") ?? pages[0];
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => {
+    const da = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const db = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return db - da;
+  });
 
-const { title, meta_title, description, image } = homePage?.data ?? {};
-const { Content } = homePage ? await render(homePage) : { Content: undefined };
+const pages = await getCollection('pages');
+const indexPage = pages.find((p) => p.id === 'index');
+const { Content: IndexContent } = indexPage ? await render(indexPage) : { Content: undefined };
 
-const call_to_action = await getListPage("ctaSection", "call-to-action");
+const base = import.meta.env.BASE_URL;
+
+function formatDate(d?: Date | string) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+}
+
+function excerpt(body: string, max = 120) {
+  const plain = body.replace(/^#+\s.*/gm, '').replace(/[*_`[\]]/g, '').trim();
+  return plain.length > max ? plain.slice(0, max) + '…' : plain;
+}
 ---
 
-<Base title={title} meta_title={meta_title} description={description} image={image}>
-  <section class="section pt-14">
-    <div class="container">
-      <div class="row justify-center">
-        <div class="lg:col-10">
-          {image && (
-            <div class="mb-8">
-              <img src={image} alt={title} class="w-full rounded" />
-            </div>
-          )}
-          <h1 class="h2 mb-6">{title}</h1>
-          <div class="content">
-            {Content && <Content />}
+<BaseLayout title="My Portfolio">
+  {IndexContent && (
+    <div class="index-intro">
+      <IndexContent />
+    </div>
+  )}
+
+  <div class="post-list">
+    {posts.map((post) => (
+      <article class="post-card">
+        <div class="post-card-inner">
+          <div class="post-card-meta">
+            <a href={`${base}blog/${post.id}`} class="post-card-title">{post.data.title}</a>
+            <div class="post-card-date">{formatDate(post.data.date)}</div>
+          </div>
+          <div class="post-card-excerpt">
+            <p>{excerpt(post.body ?? '')}</p>
+            <a href={`${base}blog/${post.id}`} class="read-more">read →</a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-  {call_to_action.data.enable && <CallToAction call_to_action={call_to_action} />}
-</Base>
+        <hr class="dotted-separator" />
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+.index-intro { padding: 1rem 0 0.5rem; font-style: italic; font-size: 1.15rem; opacity: 0.85; }
+.post-list { margin-top: 1.5rem; }
+.post-card { margin-bottom: 0.5rem; }
+.post-card-inner {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  padding: 0.75rem 0;
+  align-items: start;
+}
+.post-card-title { font-size: 1.2rem; font-weight: 700; display: block; line-height: 1.3; }
+.post-card-date { font-size: 0.9rem; opacity: 0.7; margin-top: 0.25rem; }
+.post-card-excerpt { font-size: 1rem; }
+.post-card-excerpt p { margin-bottom: 0.4rem; }
+.read-more { font-size: 0.9rem; opacity: 0.7; }
+@media (max-width: 600px) {
+  .post-card-inner { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+</style>
