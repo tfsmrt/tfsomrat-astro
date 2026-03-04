@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(dateStr?: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+}
+
+const cleanTitle = post.data.title.replace(' – My portfolio', '');
+---
+
+<BaseLayout title={cleanTitle} description={post.data.description}>
+  <div class="post-grid single-post">
+    <div class="post-meta-col">
+      <h1 class="post-title">{cleanTitle}</h1>
+      <div class="post-date">↳ {formatDate(post.data.date)}</div>
+    </div>
+    <div class="post-content-col post-content">
+      <Content />
+    </div>
+
+    <div></div>
+    <div class="post-author-line">
+      Written by <a href="#">TFSOMRAT</a> in
+      {(post.data.categories ?? []).map((cat, i) => (
+        <span>{i > 0 ? ', ' : ''}<a href="#">{cat}</a></span>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
