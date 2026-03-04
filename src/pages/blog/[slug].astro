@@ -21,7 +21,7 @@ function formatDate(d?: Date | string) {
 }
 
 const cleanTitle = post.data.title.replace(/\s[–—-]\s.*$/, '');
-const base = import.meta.env.BASE_URL;
+const rawBase = import.meta.env.BASE_URL; const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
 ---
 
 <BaseLayout title={cleanTitle} description={post.data.description}>
