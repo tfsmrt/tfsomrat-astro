@@ -31,8 +31,8 @@
   },
   "navigation_button": {
     "enable": false,
-    "label": "GitHub",
-    "link": "https://github.com/tfsmrt/tfsomrat-astro"
+    "label": "",
+    "link": ""
   },
   "google_tag_manager": {
     "enable": false,
@@ -46,6 +46,6 @@
   "metadata": {
     "meta_author": "tfsomrat",
     "meta_image": "/images/og-image.png",
-    "meta_description": "My portfolio — converted from WordPress to Astro"
+    "meta_description": "My portfolio \u2014 converted from WordPress to Astro"
   }
 }
